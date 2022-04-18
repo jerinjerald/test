@@ -1,0 +1,99 @@
+# -*- coding: utf-8 -*-
+
+from odoo import models, fields, api
+from odoo.addons import decimal_precision as dp
+
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+    
+    total_qty = fields.Float('Total Quantity', digits=dp.get_precision('Product Unit of Measure'), compute="_compute_total_qty")
+    print_with_barcode = fields.Boolean("Print With Barcode")
+    
+    def _compute_total_qty(self):
+        for rec in self:
+            qty = 0
+            for line in rec.order_line:
+                qty += line.product_uom_qty
+            rec.total_qty = qty
+    
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+     
+    total_qty = fields.Float('Total Quantity', digits=dp.get_precision('Product Unit of Measure'), compute="_compute_total_qty")
+    show_barcode = fields.Boolean("Print With Barcode")
+     
+    def _compute_total_qty(self):
+        for rec in self:
+            qty = 0
+            for line in rec.order_line:
+                qty += line.product_uom_qty
+            rec.total_qty = qty
+     
+            
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+    
+    move_total_qty = fields.Float('Total Quantity', digits=dp.get_precision('Product Unit of Measure'), compute="_compute_total_qty")
+    move_line_total_qty = fields.Float('Total Qty', digits=dp.get_precision('Product Unit of Measure'), compute="_compute_total_qty")
+    show_barcode = fields.Boolean("Print With Barcode")
+    
+    def _compute_total_qty(self):
+        for rec in self:
+            qty = 0
+            line_qty = 0
+            for line in rec.move_lines:
+                qty += line.product_uom_qty
+            for line in rec.move_line_ids:
+                line_qty += line.qty_done
+            rec.move_total_qty = qty
+            rec.move_line_total_qty = line_qty
+     
+
+
+class AccountInvoice(models.Model):
+    _inherit = 'account.move'
+     
+    total_qty = fields.Float('Total Quantity',digits=dp.get_precision('Product Unit of Measure'), compute="_compute_total_qty")
+    show_barcode = fields.Boolean("Print With Barcode") 
+    
+    def _compute_total_qty(self):
+        for rec in self:
+            qty = 0
+            for line in rec.invoice_line_ids:
+                pass
+                qty += line.quantity
+            rec.total_qty = qty
+     
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+    
+    barcode = fields.Char('Barcode', related="product_id.barcode")
+    
+    
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
+    
+    barcode = fields.Char('Barcode', related="product_id.barcode")
+    
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.move.line'
+    
+    barcode = fields.Char('Barcode', related="product_id.barcode")
+    
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+    
+    barcode = fields.Char('Barcode', related="product_id.barcode")
+
+                
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+    
+    barcode = fields.Char('Barcode', related="product_id.barcode")
+    
+    
+    
+    
