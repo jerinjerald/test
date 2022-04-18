@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+		<template id="purchasequotation_template_inherit"
+			inherit_id="purchase.report_purchasequotation_document"  priority="1">
+			<xpath expr="//table[1]//thead//tr[1]//th[2]" position="after">
+				<th class="text-left" t-if="o.show_barcode">Barcode</th>
+			</xpath>
+			<xpath expr="//table[1]//tbody//tr[1]//td[2]" position="after">
+				<td t-if="o.show_barcode" class="text-left">
+					<span t-field="order_line.barcode" />
+				</td>
+			</xpath>
+			<xpath expr="//table[1]" position="after">
+				<div  class="mt32 col-4 border-black" >
+					<tr class="mt16 o_subtotal"> 
+					<td>
+						<strong>Total Quantity:</strong>
+					</td>
+					<td class="text-right">
+						<span t-field="o.total_qty" />
+					</td>
+					</tr>
+				</div>
+
+
+			</xpath>
+		</template>
+
+		<template id="purchaseorder_template_inherit"
+			inherit_id="purchase.report_purchaseorder_document"  priority="1">
+			<xpath expr="//table[1]//thead//tr[1]//th[2]" position="after">
+				<th class="text-left" t-if="o.show_barcode">Barcode</th>
+			</xpath>
+			<xpath expr="//table[1]//tbody//tr[1]//td[2]" position="after">
+				<td t-if="o.show_barcode" class="text-left">
+					<span t-field="line.barcode" />
+				</td>
+			</xpath>
+			<xpath expr="//div[@id='total']" position="before">
+				<div  class="mt32 col-4 border-black" >
+					<tr class="mt16 o_subtotal"> 
+					<td>
+						<strong>Total Quantity:</strong>
+					</td>
+					<td class="text-right">
+						<span t-field="o.total_qty" />
+					</td>
+					</tr>
+				</div>
+
+
+			</xpath>
+		</template>
+
+	</data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+		<template id="saleorder_template_inherit"
+			inherit_id="sale.report_saleorder_document" priority="1">
+			<xpath expr="//table[1]//thead//tr[1]//th[1]" position="after">
+				<th t-if="doc.print_with_barcode" class="text-left">Barcode</th>
+			</xpath>
+			<xpath expr="//table[1]//tbody//tr[1]//td[1]" position="after">
+				<td t-if="doc.print_with_barcode" class="text-left">
+					<span t-field="line.barcode" />
+				</td>
+			</xpath>
+			<xpath expr="//div[@id='total']" position="before">
+				<div  class="mt32 col-4 border-black" >
+					<tr class="mt16 o_subtotal"> 
+					<td>
+						<strong>Total Quantity:</strong>
+					</td>
+					<td class="text-right">
+						<span t-field="doc.total_qty" />
+					</td>
+					</tr>
+				</div>
+
+			</xpath>
+
+		</template>
+	</data>
+</odoo>
