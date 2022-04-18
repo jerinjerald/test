@@ -9,7 +9,9 @@ class SaleOrder(models.Model):
     
     total_qty = fields.Float('Total Quantity', digits=dp.get_precision('Product Unit of Measure'), compute="_compute_total_qty")
     print_with_barcode = fields.Boolean("Print With Barcode")
-    
+    x_quotetemplate=fields.Html('Quote Template')
+    x_branch=fields.selection(('Service','Service'), ('Trading','Trading'))
+    x_subject=fields.selection(('KD','Quotation for Kitchen Exhaust Cleaning & Services'), ('WT','Quotation for Water Tank Cleaning & Disinfection'), ('DL','Quotation for Drain Line Cleaning & Block Removal'), ('GT','Quotation for Grease Trap Cleaning & Waste Disposal'), ('PST','Quotation for Pest Control Services'), ('DSF','Quotation for Disinfection & Sanitization Services'), ('QA','Quotation'))
     def _compute_total_qty(self):
         for rec in self:
             qty = 0
@@ -71,7 +73,9 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     
     barcode = fields.Char('Barcode', related="product_id.barcode")
-    
+    x_Frequencymonth = fields.integer('Frequency/Month')
+    x_Frequencyyear = fields.integer('Frequency/ Year')
+    x_location = fields.many2one('res.partner', 'Location', required=True)
     
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
