@@ -11,7 +11,7 @@ class SaleOrder(models.Model):
     print_with_barcode = fields.Boolean("Print With Barcode")
     x_quotetemplate=fields.Html('Quote Template')
     x_branch= ([('Service','Service'), ('Trading','Trading')],'Branch')
-    x_subject=fields.selection(('KD','Quotation for Kitchen Exhaust Cleaning & Services'), ('WT','Quotation for Water Tank Cleaning & Disinfection'), ('DL','Quotation for Drain Line Cleaning & Block Removal'), ('GT','Quotation for Grease Trap Cleaning & Waste Disposal'), ('PST','Quotation for Pest Control Services'), ('DSF','Quotation for Disinfection & Sanitization Services'), ('QA','Quotation'))
+    x_subject=fields.selection([('KD','Quotation for Kitchen Exhaust Cleaning & Services'), ('WT','Quotation for Water Tank Cleaning & Disinfection'), ('DL','Quotation for Drain Line Cleaning & Block Removal'), ('GT','Quotation for Grease Trap Cleaning & Waste Disposal'), ('PST','Quotation for Pest Control Services'), ('DSF','Quotation for Disinfection & Sanitization Services'), ('QA','Quotation')],'Subject')
     def _compute_total_qty(self):
         for rec in self:
             qty = 0
