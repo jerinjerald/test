@@ -73,9 +73,9 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     
     barcode = fields.Char('Barcode', related="product_id.barcode")
-    x_Frequencymonth = fields.integer('Frequency/Month')
-    x_Frequencyyear = fields.integer('Frequency/ Year')
-    x_location = fields.many2one('res.partner', 'Location', required=True)
+    x_Frequencymonth = fields.Integer('Frequency/Month')
+    x_Frequencyyear = fields.Integer('Frequency/ Year')
+    x_location = fields.Many2one('res.partner', 'Location', required=True)
     
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
