@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+
+	<report
+		id="action_report_listing"
+		string="KD-SSR"
+		model="account.move"
+		report_type="qweb-pdf"
+		name="print_contact.listing"
+		print_report_name="'KD-SSR'"
+		
+	/>
+	
+	<template id="listing">
+         <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">										
+			
+                        <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)" />
+              <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+
+                            
+                                <t t-set="location" t-value="o.invoice_line_ids[0].x_location.name" />
+                                <t t-set="jobdate" t-value="o.invoice_line_ids[0].x_jobdate" />
+                                <t t-set="ref" t-value="o.invoice_line_ids[0].ref" />
+                                <span t-set="d_delta" t-value="datetime.timedelta(days=o.x_DaysFrequency)" />
+                                <!--  <span  t-set="d_delta"   t-value="d_deltas.strftime('%d/%m/%Y')"/>
+
+                              <span t-set="d_dateorder" t-value="datetime.datetime.strptime(line.x_jobdate,'%Y-%m-%d %H:%M:%S')"/>-->
+
+                                <span t-set="duedate" t-value="o.invoice_line_ids[0].x_jobdate + d_delta"/>
+                               
+                           
+                <div class="page">
+                    <h2 class="text-center">
+                        <span>KITCHEN EXHAUST SYSTEM-SERVICE REPORT</span>
+                     
+                    </h2>
+<table class="table table-bordered">
+                        <thead>
+                            
+                        </thead>
+                        <tbody>
+                        <tr style="border: 1px solid black;border-collapse: collapse;">
+                                <td><b class="col-xs-3 text-left">Customer Details</b>
+            <div t-field="o.partner_id"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+            <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></p>
+            <p>
+             <t t-if="o.partner_id.email"><t t-esc="'Email'"/>: <span t-field="o.partner_id.email"/></t><br/>
+             <t t-if="o.partner_id.phone"><t t-esc="'Phone'"/>: <span t-field="o.partner_id.phone"/></t></p>
+             <b>Location:</b><t t-esc="location"/>
+             
+             </td>
+                              
+                                 <td>Date : <t t-esc="o.date.strftime('%d/%m/%Y')"/><br/>
+                                 GSI Ref : <t t-if="o.invoice_origin"><t t-esc="o.invoice_origin"/></t>  <t t-if="o.x_gsiref"><t t-esc="o.x_gsiref.name"/></t>      <br/>
+                                 Customer Ref  <t t-esc="ref"/><br/>
+                                 
+</td>
+                                
+                            </tr>
+                            
+                            
+                        </tbody>
+                    </table>
+                   
+
+                    <div class="clearfix">
+                    
+                    </div>
+               <table  >
+	<tbody>
+		<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<th t-att-colspan='4' style="padding-left:5px;">SERVICE PERFORMED </th>
+				
+			 
+			 
+			</tr>
+				
+			
+				<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="width:25%;
+  border-collapse: collapse;padding-left:5px;">No of Hoods cleaned	</td>
+				
+			<td style="width: 16%;padding-left:5px;"><t t-esc="o.x_noofhoodsandcleaned"/></td>
+			<td style="width: 28%;padding-left:5px;">Grease cups cleaned</td>
+			<td style="width: 16%;padding-left:5px;"><input   type="checkbox"  checked="True" />
+            <label class="form-check-label" >Yes </label>
+            <input   type="checkbox"  checked="False" />
+            <label class="form-check-label" >No	</label>	</td>
+			</tr>
+		
+			<tr style="border: 1px solid black;">
+		
+			<td style="padding-left:5px;">Hood light cleaned</td>
+				
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox"/>No		</td>
+			<td style="padding-left:5px;">Vertical duct cleaned 	</td>
+			<td style="padding-left:5px;"><input   type="checkbox"/>Yes
+<input  checked="True"  type="checkbox"/>No	</td>
+			</tr>
+		
+			
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="padding-left:5px;">Exhaust fan cleaned	</td>
+				
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox"/>No		</td>
+			<td style="padding-left:5px;">Exhaust fan belts and pulleys inspected</td>
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox"/>No		</td>
+			</tr>
+		
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="padding-left:5px;">Additional cleaning performed	</td>
+				
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox"/>No		</td>
+			<td style="padding-left:5px;">Horizontal duct cleaned 	</td>
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True"/>Yes
+<input   type="checkbox"/>No		</td>
+			</tr>
+		<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="padding-left:5px;">No Access Panel<br/>Access panel new installation	</td>
+				
+			<td style="padding-left:5px;"> <t t-esc="o.x_accesspanelNo"/><br/><t t-esc="o.x_accesspanelnewinstallation"/> 	</td>
+			<td style="padding-left:5px;">No of fans cleaned	</td>
+				
+			<td style="padding-left:5px;"><t t-esc="o.x_nooffansandcleaned"/>	</td>
+			</tr>
+		 
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<th colspan='4' style="padding-left:5px;">POST CLEANING CHECKS</th>
+				
+			
+			</tr>
+			
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="padding-left:5px;">Work area left free of grease,rags	</td>
+				
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox"/>No		</td>
+			<td style="padding-left:5px;">Disposal of waste as per standard	</td>
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox" />No		</td>
+			</tr>
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="padding-left:5px;">Lockout/tag out removed	</td>
+				
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox" />No		</td>
+			<td style="padding-left:5px;">Certified Sticker on hood	</td>
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox" />No		</td>
+			</tr>
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="padding-left:5px;">Exhaust fan restarted</td>
+				
+			<td style="padding-left:5px;"><input   type="checkbox" checked="True" />Yes
+<input   type="checkbox"/>No		</td>
+			<td >	</td>
+			<td >		</td>
+			</tr>
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="padding-left:5px;">Photos  taken</td>
+				
+			<td  style="padding-left:5px;"><input   type="checkbox" checked="True" />Hood
+<input   type="checkbox" checked="True" />Duct<input   type="checkbox" checked="True" />Fan</td>
+			<td style="padding-left:5px;">Type of exhausted fan</td>
+			<td style="padding-left:5px;"><t t-esc="o.x_fantype"/></td>
+			</tr>
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<th colspan='4' style="padding-left:5px;">Frequency of cleaning</th>
+				
+			
+			</tr>
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td style="width:25%;padding-left:5px;">Filter Cleaning</td>
+				
+			<td style="padding-left:5px;"><input   type="checkbox" />Daily
+<input   type="checkbox" checked="True" />Not Known</td>
+			<td style="padding-left:5px;">Duct</td>
+			<td style="padding-left:5px;"><input   type="checkbox" />Quarterly
+<input   type="checkbox"/>Semiannual<input   type="checkbox" checked="True" />NA</td>
+			</tr>
+			
+			<tr style="border: 1px solid black;border-collapse: collapse;">
+		
+			<td colspan ='2' style="padding-left:5px;">Date of cleaning:  <t t-esc="jobdate.strftime('%d/%m/%Y')"/>       
+	</td>	<td colspan ='2' style="padding-left:5px;" >	Next due date: <span t-esc="duedate.strftime('%d/%m/%Y')"/>
+			   </td>
+				
+			
+			</tr>
+			
+			
+			
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+    <tbody>
+
+			<tr>
+		
+			<td  colspan='2' style="">Comments:  
+				We recommend to cleaning the hood  and  filter every day<br/><t t-esc="o.x_comment"/></td>
+				
+			</tr>
+			<tr>
+		
+		<td style="width: 50%;">  Engineer/Supervisor Signature <br/><img t-if="o.company_id.x_sign" t-att-src="image_data_uri(o.company_id.x_sign)"   alt="Signature"/></td>
+
+			<td style="width: 50%;">Company/Stamp<br/>  <img t-if="o.company_id.x_stamp" t-att-src="image_data_uri(o.company_id.x_stamp)"   alt="Stamp"/></td>
+			
+			</tr>
+	</tbody>
+</table>
+                   
+                </div>
+            </t>
+            
+            
+            </t>	
+		</t>	
+
+	</template>
+	
+</odoo>

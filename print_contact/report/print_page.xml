@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+
+	<report
+		id="action_report_page"
+		string="WT-CERT"
+		model="account.move"
+		report_type="qweb-pdf"
+		name="print_contact.page"
+		print_report_name="'WT-CERT'"
+		
+	/>
+	
+	<template id="page">
+         <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">										
+			 <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)" />
+                <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+
+                             <t t-set="location" t-value="o.invoice_line_ids[0].x_location.name" />
+                                <t t-set="jobdate" t-value="o.invoice_line_ids[0].x_jobdate" />
+                                <t t-set="ref" t-value="o.invoice_line_ids[0].ref" />
+                                <span t-set="d_delta" t-value="datetime.timedelta(days=o.x_DaysFrequency)"/>
+
+                              <!--  <span t-set="d_dateorder" t-value="datetime.datetime.strptime(line.x_jobdate,'%Y-%m-%d %H:%M:%S')"/>-->
+
+                                <span t-set="duedate" t-value="o.invoice_line_ids[0].x_jobdate + d_delta"/>
+                <div class="page">
+                    <h2 class="text-center">
+                        <span>CERTIFICATE</span>
+                     
+                    </h2>
+                   <hr/>
+      <div><h3 style="text-align: center;">WATER TANK CLEANING AND DISINFECTION</h3></div>
+                     <div class="clearfix">
+                    
+                    </div>
+<table class="table table-bordered">
+                        
+                        <tbody>
+                        <tr style="border: 1px solid black;border-collapse: collapse;">
+                                <td><b class="col-xs-3 text-left">Customer Details</b>
+            <div t-field="o.partner_id"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+            <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></p>
+            <p>
+             <t t-if="o.partner_id.email"><t t-esc="'Email'"/>: <span t-field="o.partner_id.email"/></t><br/>
+             <t t-if="o.partner_id.phone"><t t-esc="'Phone'"/>: <span t-field="o.partner_id.phone"/></t></p>
+             <b>Location:</b><t t-esc="location"/>
+             
+             </td>
+                              
+                                 <td>Date : <t t-esc="o.date.strftime('%d/%m/%Y')"/><br/>
+                                 GSI Ref : <t t-if="o.invoice_origin"><t t-esc="o.invoice_origin"/></t>  <t t-if="o.x_gsiref"><t t-esc="o.x_gsiref.name"/></t>      <br/>
+                                 Customer Ref : <t t-esc="ref"/><br/>
+                                 
+</td>
+                                
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                   
+
+                    <div class="clearfix">
+                    
+                    </div>
+                    <p>Date of Cleaning : <t t-esc="jobdate.strftime('%d/%m/%Y')"/>
+</p>
+                    <p>Next Date of Cleaning As per NFPA:<t t-esc="duedate.strftime('%d/%m/%Y')"/></p> <br/>
+                    <p>The procedure employed in this cleaning and disinfection of water storage tank is in accordance with the
+                    Legionella Control Association (LCA) code of conduct, current Health and Safety Regulations and according to Greenshine 
+                    International W.l.l method of statement (Ref GSI-W-MOS-1.01,102,103) </p>
+                    <p>Recommendation and observations: Please refer to the attached Water Storage Tank After Service Report.</p>
+                    <p>The water storage tank should be inspected cleaned in minimum every 6 months, or depends upon conditions. </p> <br/> <br/> <br/> 
+                    <p>Greenshine International 
+</p>
+                  <table >
+    <tbody>
+
+			
+			<tr>
+		
+		<td style="width: 50%;"> <img t-if="o.company_id.x_sign" t-att-src="image_data_uri(o.company_id.x_sign)"   alt="Signature"/></td>
+
+			<td style="width: 50%;"> <img t-if="o.company_id.x_stamp" t-att-src="image_data_uri(o.company_id.x_stamp)"   alt="Stamp"/></td>
+			
+			</tr>
+	</tbody>
+</table>
+                   
+                   
+                  
+                </div>
+            </t>		
+					
+					
+		</t>
+		</t>	
+
+	</template>
+	
+</odoo>

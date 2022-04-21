@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+
+	<report
+		id="action_report_sale"
+		string="Quotation"
+		model="sale.order"
+		report_type="qweb-pdf"
+		name="print_contact.sale"
+		print_report_name="'Quotation'"
+		
+	/>
+	
+	<template id="sale">
+         <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">										
+        <t t-call="web.external_layout">
+			<t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+        <div class="col-xs-3 text-left">
+       
+        <b class="col-xs-3 text-left">Customer Details</b>
+            <div t-field="doc.partner_id"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+            <p t-if="doc.partner_id.vat"><t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="doc.partner_id.vat"/></p>
+            <p>
+             <t t-if="doc.partner_id.email"><t t-esc="'Email'"/>: <span t-field="doc.partner_id.email"/></t><br/>
+             <t t-if="doc.partner_id.phone"><t t-esc="'Phone'"/>: <span t-field="doc.partner_id.phone"/></t></p>
+        </div>
+        <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
+                             and doc.partner_invoice_id != doc.partner_id
+                             or doc.partner_shipping_id != doc.partner_invoice_id">
+            <t t-set="information_block">
+                <strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">Invoicing and Shipping Address:</strong>
+                <strong t-if="doc.partner_shipping_id != doc.partner_invoice_id">Invoicing Address:</strong>
+                <div t-field="doc.partner_invoice_id"
+                t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                <t t-if="doc.partner_shipping_id != doc.partner_invoice_id">
+                    <strong>Location :</strong>
+                    <div t-field="doc.partner_shipping_id"
+                        t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                </t>
+            </t>
+        </t>
+        
+        
+        <div class="page">
+            <div class="oe_structure"/>
+<div class="row mt32 mb32" id="informations">
+                <div t-if="doc.client_order_ref" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Your Reference:</strong>
+                    <p class="m-0" t-field="doc.client_order_ref"/>
+                </div>
+                <div t-if="doc.date_order and doc.state not in ['draft','sent']" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Order Date:</strong>
+                    <p class="m-0" t-field="doc.date_order"/>
+                </div>
+                <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Quotation Date:</strong>
+                    <p class="m-0" t-field="doc.date_order" t-options='{"widget": "date"}'/>
+                </div>
+                <div t-if="doc.validity_date and doc.state in ['draft', 'sent']" class="col-auto col-3 mw-100 mb-2" name="expiration_date">
+                    <strong>Expiration:</strong>
+                    <p class="m-0" t-field="doc.validity_date"/>
+                </div>
+                <div t-if="doc.user_id.name" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Salesperson:</strong>
+                    <p class="m-0" t-field="doc.user_id"/>(<t t-if="doc.user_id.mobile"> <span t-field="doc.user_id.mobile"/></t>)
+                </div>
+            </div> 
+            <h4 class="mt16">
+            <t t-esc="doc.x_subject"/>
+                <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                    <span t-if="doc.state not in ['draft','sent']">Order # </span>
+                    <span t-if="doc.state in ['draft','sent']">Ref # </span>
+                </t>
+                <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                    <span>Pro-Forma Invoice # </span>
+                </t>
+                <span t-field="doc.name"/>
+            </h4><br/>
+<p>Dear Sir</p>
+<p>Greetings from Greenshine International</p>
+<p>We wish to take this opportunity to thank you for allowing Greenshine International to submit a Quote proposal for the subject. Bellow given is our best pricing, hope it will suit to your
+requirement and budget.</p>
+<p>Why We Are Different</p>
+
+<p class="pl-5">NFPA Registered Company.<br/>
+
+  Following MOS that comprises NFPA 96 Code and standard (Edition 2014)<br/>
+   Serving most of the clients over 6 years with dedicated trained staves having years experience in this filed<br/>
+   Professional Work as proof<br/>
+  Reliably, Safety, available and individually.<br/>
+  
+   Boost the corporate image cleanliness,</p>
+
+<p>Provide the best cost,regardless of the high quality Though some companies may have been rendering similar services for over decade now,we are different because of our dedication to
+work and service. We have done many researches to suit modern cleaning services. We have gone for seminars, training and workshops to improve and give our best on all forms of
+Technical Cleaning, provide our clients with a one-stop cleaning services.</p>
+<p>Greenshine International W.l.l provides more than just cleaning, We are specialized in technical cleaning services and general trading. Our general trading division facilitate right solutions
+for your all purchase requirements including kitchen equipment parts and repairs and cleaning, with best option available in local and international markets.</p>
+<p>Our services includes</p>
+
+<p class="pl-5">
+Kitchen Exhaust System Cleaning.
+<br/>
+ Water Tank Cleaning and Disinfection<br/>
+ Pest Control Services<br/>
+ Disinfection and Sanitization Services<br/>
+   Drain Line and Grease Trap Cleaning<br/>
+ AC Duct Cleaning and Sensitization<br/>
+   Offshore and Marine Cleaning<br/>
+  Kitchen Equipments Sales and Services
+
+</p>
+<p>We need the following Requirements at the job site</p>
+
+  <p class="pl-5">220 volts single phase power at multiple locations..
+<br/>
+ Fresh water supply at multiple locations.<br/>
+   Waste disposal facility<br/>
+  Exhaust fans need to be turned off and no cooking to be carried out.<br/>
+   Hood Fire Suppression system should be turn off while cleaning
+  
+</p>
+
+<p>Please find below our best prices for the scope of works, hope the prices are under your budget and waiting approval for further contract procedure and scheduling</p>
+<p>Do not hesitate to contact us for any further details</p>
+<!---->
+
+
+
+
+
+            
+
+            <!-- Is there a discount on at least one line? -->
+            <t t-set="display_discount" t-value="any(l.discount for l in doc.order_line)"/>
+
+            <table class="table table-sm o_main_table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th name="th_number">#</th>
+                        <th name="th_description" class="text-left">Description</th>
+                        <th name="th_quantity" class="text-right">Quantity</th>
+                        <th name="th_priceunit" class="text-right">Unit Price</th>
+                        <th name="th_discount" t-if="display_discount" class="text-right" groups="product.group_discount_per_so_line">
+                            <span>Disc.%</span>
+                        </th>
+                       
+                        <th name="th_subtotal" class="text-right">
+                            <span groups="account.group_show_line_subtotals_tax_excluded">Amount</span>
+                            <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+
+                    <t t-set="current_subtotal" t-value="0"/>
+
+                    <t t-foreach="doc.order_line" t-as="line">
+
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                        <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <t t-if="not line.display_type">
+                            <td name="td_number">
+					<span t-field="line.number" />
+				</td>
+                                <td name="td_name"><span t-field="line.name"/><br/> <b>Location:</b><span t-field="line.x_location"/> </td>
+                                <td name="td_quantity" class="text-right">
+                                    <span t-field="line.product_uom_qty"/>
+                                    <span t-field="line.product_uom"/>
+                                </td>
+                                <td name="td_priceunit" class="text-right">
+                                    <span t-field="line.price_unit"/>
+                                </td>
+                                <td t-if="display_discount" class="text-right" groups="product.group_discount_per_so_line">
+                                    <span t-field="line.discount"/>
+                                </td>
+                                
+                                <td name="td_subtotal" class="text-right o_price_total">
+                                    <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"
+                                    t-options='{"widget": "float", "precision": 2}'/>
+                                    <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"
+                                    t-options='{"widget": "float", "precision": 2}'/>
+                                </td>
+                            </t>
+                            <t t-if="line.display_type == 'line_section'">
+                                <td name="td_section_line" colspan="99">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <t t-set="current_section" t-value="line"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-if="line.display_type == 'line_note'">
+                                <td name="td_note_line" colspan="99">
+                                    <span t-field="line.name"/>
+                                </td>
+                            </t>
+                        </tr>
+
+                        <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section')">
+                            <tr class="is-subtotal text-right">
+                                <td name="td_section_subtotal" colspan="99">
+                                    <strong class="mr16">Subtotal</strong>
+                                    <span
+                                        t-esc="current_subtotal"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                    />
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+
+            <div class="clearfix" name="so_total_summary">
+                <div id="total" class="row" name="total">
+                    <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                        <table class="table table-sm">
+                            <tr class="border-black o_subtotal" style="">
+                                <td name="td_amount_untaxed_label"><strong>Subtotal</strong></td>
+                                <td name="td_amount_untaxed" class="text-right">
+                                    <span t-field="doc.amount_untaxed"/>
+                                </td>
+                            </tr>
+                            <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
+                                <tr style="">
+                                    <t t-if="amount_by_group[5] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                        <td name="td_amount_by_group_label_3">
+                                            <span t-esc="amount_by_group[0]"/>
+                                            <span>&amp;nbsp;<span>on</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/></span>
+                                        </td>
+                                        <td name="td_amount_by_group_3" class="text-right o_price_total">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                    <t t-else ="">
+                                        <td name="td_amount_by_group_label">
+                                            <span t-esc="amount_by_group[0]"/>
+                                        </td>
+                                        <td name="td_amount_by_group" class="text-right o_price_total">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                            <tr class="border-black o_total">
+                                <td name="td_amount_total_label"><strong>Total</strong></td>
+                                <td name="td_amount_total" class="text-right">
+                                    <span t-field="doc.amount_total"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div t-if="doc.signature" class="mt32 ml64 mr4" name="signature">
+                <div class="offset-8">
+                    <strong>Signature</strong>
+                </div>
+                <div class="offset-8">
+                    <img t-att-src="image_data_uri(doc.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                </div>
+                <div class="offset-8 text-center">
+                    <p t-field="doc.signed_by"/>
+                </div>
+            </div>
+
+            <div class="oe_structure"/>
+
+            <p t-field="doc.note" />
+            <p t-if="doc.payment_term_id.note">
+                <span t-field="doc.payment_term_id.note"/>
+            </p>
+            <p id="fiscal_position_remark" t-if="doc.fiscal_position_id and doc.fiscal_position_id.sudo().note">
+                <strong>Fiscal Position Remark:</strong>
+                <span t-field="doc.fiscal_position_id.sudo().note"/>
+            </p>
+            
+            <div class="row mt32 mb32" id="informations">
+                <div t-if="doc.create_uid" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Prepared:</strong>
+                    <p class="m-0" t-field="doc.create_uid"/>
+                </div>
+                <div t-if="doc.user_id" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Verified :</strong>
+                    <p class="m-0" t-field="doc.user_id"/>
+                </div>
+                <div t-if="doc.user_id" class="col-auto col-3 mw-100 mb-2">
+                    <strong>Approved:</strong>
+                    <p class="m-0" >General Manager</p>
+                </div>
+              
+            </div> 
+        </div>		
+					
+		</t>
+		</t>	
+</t>	
+	</template>
+	
+</odoo>
