@@ -72,7 +72,7 @@
 					<field name='loca' />
 				</xpath>
 				<xpath
-					expr="//page[1]//field[@name='line_ids']//tree//field[@name='name']"
+					expr="//page[2]//field[@name='line_ids']//tree//field[@name='name']"
 					position='after'>
 					
 					<field name='loca' />
