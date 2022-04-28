@@ -76,6 +76,7 @@
 					position='after'>
 					
 					<field name='loca' />
+					<field name='x_location' />
 				</xpath>
 				<field name="invoice_line_ids" position="after">
 					<group style=" border-top: 1px solid #cacaca;"
