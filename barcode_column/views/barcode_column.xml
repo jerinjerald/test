@@ -71,6 +71,12 @@
 					<field name='barcode' />
 					<field name='loca' />
 				</xpath>
+				<xpath
+					expr="//page[1]//field[@name='line_ids']//tree//field[@name='name']"
+					position='after'>
+					
+					<field name='loca' />
+				</xpath>
 				<field name="invoice_line_ids" position="after">
 					<group style=" border-top: 1px solid #cacaca;"
 						class="mt4 oe_left">
