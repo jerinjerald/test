@@ -87,6 +87,7 @@ class AccountInvoiceLine(models.Model):
     
     barcode = fields.Char('Barcode', related="product_id.barcode")
     loca = fields.Many2one('res.partner', 'Location', required=True)
+    x_location= fields.Many2one('res.partner', 'Location', required=True)
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
